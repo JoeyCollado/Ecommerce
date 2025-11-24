@@ -28,3 +28,22 @@ export const syncUserCreation = inngest.createFunction(
     }
 )
 
+// Inngest function to update user data in database
+export const syncUserUpdation = inngest.createFunction(
+    {
+        id: 'update-user-from-clerk'
+    },
+    {event: 'clerk/user.updated'},
+    async ({event}) => {
+        const {id, first_name, last_name, email_addresses, image_url} = event.data //destructure from the event data
+        //create object where we will define user data then store it to db
+        const userData = {
+         _id:id,
+         email: email_addresses[0].email_addresses,
+         name: first_name + ' ' + last_name,
+         image_url: image_url
+        }
+        await connectDB()
+        await User.findByIdAndUpdate(id, userData )
+    }
+)
