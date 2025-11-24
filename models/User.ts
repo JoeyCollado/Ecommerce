@@ -8,3 +8,9 @@ const userSchema = new mongoose.Schema({
     imageUrl : {type: String, required:true},
     cartItems : {type: Object, default: {}}
 }, {minimize: false})
+
+//create user model
+//           validator               creation
+const User = mongoose.models.user || mongoose.model('user', userSchema) // here is what we use to create multiple users and store them in database
+
+export default User
