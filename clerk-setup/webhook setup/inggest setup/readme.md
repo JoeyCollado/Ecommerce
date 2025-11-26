@@ -5,3 +5,4 @@ npm install inngest
 
 https://app.inngest.com/env/production/onboarding/create-app
 https://www.inngest.com/docs?ref=support-center
+https://www.inngest.com/docs/getting-started/nextjs-quick-start?ref=docs-home
