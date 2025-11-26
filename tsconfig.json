@@ -1,7 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2017",
+<<<<<<< HEAD
     "lib": ["dom", "dom.iterable", "esnext"],
+=======
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+>>>>>>> 08696b07689f20cd393737c0569dc58e63240dcb
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -13,6 +21,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+<<<<<<< HEAD
 
     "baseUrl": ".",                     // <-- REQUIRED
     "paths": {                          // <-- REQUIRED
@@ -21,6 +30,12 @@
 
     "plugins": [
       { "name": "next" }
+=======
+    "plugins": [
+      {
+        "name": "next"
+      }
+>>>>>>> 08696b07689f20cd393737c0569dc58e63240dcb
     ]
   },
   "include": [
@@ -29,9 +44,17 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "**/*.ts",
+<<<<<<< HEAD
     "**/*.tsx",
     "app/api/inngest/route.js",
     "config/inngest.js"
   ],
   "exclude": ["node_modules"]
+=======
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+>>>>>>> 08696b07689f20cd393737c0569dc58e63240dcb
 }

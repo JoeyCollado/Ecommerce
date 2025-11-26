@@ -10,16 +10,22 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.35.2",
+    "@typescript-eslint/eslint-plugin": "^8.47.0",
+    "@typescript-eslint/parser": "^8.47.0",
+    "inngest": "^3.46.0",
     "mongoose": "^8.20.1",
     "next": "^16.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hot-toast": "^2.5.1"
+    "react-hot-toast": "^2.5.1",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.7",
     "eslint": "^9",
-    "eslint-config-next": "15.1.6",
+    "eslint-config-next": "^16.0.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1"
   }
