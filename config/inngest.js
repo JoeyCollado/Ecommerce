@@ -13,11 +13,12 @@ export const syncUserCreation = inngest.createFunction(
     const { id, first_name, last_name, email_addresses, image_url } = event.data;
 
     const userData = {
-      _id: id,
-      _email: email_addresses[0].email_address,
-      _name: `${first_name} ${last_name}`,
-      imageUrl: image_url,
-    };
+        _id: id,
+        _email: email_addresses?.[0]?.email_address || "",
+        _name: `${first_name || ""} ${last_name || ""}`.trim() || "New User",
+        imageUrl: image_url || "https://ui-avatars.com/api/?name=User",
+      };
+      
 
     await connectDB();
     await User.create(userData);
