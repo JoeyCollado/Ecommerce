@@ -1,6 +1,6 @@
 "use client";
 import { productsDummyData, userDummyData } from "@/assets/assets";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -16,6 +16,9 @@ export const AppContextProvider = (props) => {
 
   //get user details and object
   const { user } = useUser();
+
+  //get token method
+  const {getToken} = useAuth()
 
   const [products, setProducts] = useState([]);
   const [userData, setUserData] = useState(false);
@@ -89,21 +92,14 @@ export const AppContextProvider = (props) => {
   }, [user]);
 
   const value = {
-    user,
-    currency,
-    router,
-    isSeller,
-    setIsSeller,
-    userData,
-    fetchUserData,
-    products,
-    fetchProductData,
-    cartItems,
-    setCartItems,
-    addToCart,
-    updateCartQuantity,
-    getCartCount,
-    getCartAmount,
+    user, getToken,
+    currency, router,
+    isSeller, setIsSeller,
+    userData, fetchUserData,
+    products, fetchProductData,
+    cartItems, setCartItems,
+    addToCart, updateCartQuantity,
+    getCartCount, getCartAmount,
   };
 
   return (
