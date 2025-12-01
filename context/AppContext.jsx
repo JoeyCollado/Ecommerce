@@ -1,8 +1,10 @@
 "use client";
 import { productsDummyData, userDummyData } from "@/assets/assets";
 import { useAuth, useUser } from "@clerk/nextjs";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export const AppContext = createContext();
 
@@ -35,9 +37,25 @@ export const AppContextProvider = (props) => {
         //only show seller dashboard if user metadata is for seller
         setIsSeller(true);
       }
-      setUserData(userDummyData);
-    } catch (error) {}
-  };
+
+      //get data from api
+      const token = await getToken()
+      //call api
+      const {data} = await axios.get('/api/user/data', {headers: {Authorization: `Bearer ${token}`}})
+      //validation
+      if(data.success){
+        setUserData(data.user) //set user data
+        //set cart items data
+        setCartItems(data.user.cartItems)
+      }else{
+        toast.error(data.message) //error notification
+      }
+
+    } catch (error) {
+      toast.error(error.message) //error notification
+    }
+
+ };
 
   const addToCart = async (itemId) => {
     let cartData = structuredClone(cartItems);

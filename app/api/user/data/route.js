@@ -9,7 +9,6 @@ export async function GET(request){
 
     try{
         const {userId} = getAuth(request) //fetch user id
-
         //fetch user details
         await connectDB()
         const user = await User.findById(userId)
