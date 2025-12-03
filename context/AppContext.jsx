@@ -18,7 +18,6 @@ export const AppContextProvider = (props) => {
 
   //get user details and object
   const { user } = useUser();
-
   //get token method
   const {getToken} = useAuth()
 
@@ -33,11 +32,10 @@ export const AppContextProvider = (props) => {
 
   const fetchUserData = async () => {
     try {
-      if (user.publicMetadata.role === "seller") {
+      if (user.publicMetadata.role === 'seller') {
         //only show seller dashboard if user metadata is for seller
         setIsSeller(true);
       }
-
       //get data from api
       const token = await getToken()
       //call api
@@ -99,15 +97,14 @@ export const AppContextProvider = (props) => {
   };
 
   useEffect(() => {
-    fetchProductData();
-  }, []);
+    fetchProductData()
+}, [])
 
-  useEffect(() => {
-    if (user) {
-      fetchUserData();
-    }
-    fetchUserData();
-  }, [user]);
+useEffect(() => {
+  if(user){
+    fetchUserData()
+  }
+}, [user])
 
   const value = {
     user, getToken,
