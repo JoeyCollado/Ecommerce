@@ -13,6 +13,7 @@
     "@typescript-eslint/eslint-plugin": "^8.47.0",
     "@typescript-eslint/parser": "^8.47.0",
     "axios": "^1.13.2",
+    "cloudinary": "^2.8.0",
     "inngest": "^3.46.0",
     "mongoose": "^8.20.1",
     "next": "^16.0.3",
