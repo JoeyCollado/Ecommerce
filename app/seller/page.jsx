@@ -2,8 +2,12 @@
 import React, { useState } from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import { useAppContext } from "@/context/AppContext";
+import axios from "axios";
 
 const AddProduct = () => {
+
+  const  {getToken} = useAppContext()
 
   const [files, setFiles] = useState([]);
   const [name, setName] = useState('');
@@ -15,6 +19,41 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    //call api
+    const formData = new FormData()
+    //add state data as a form data
+    formData.append('name', name)
+    formData.append('description', description)
+    formData.append('category', category)
+    formData.append('price', price)
+    formData.append('offerPrice', offerPrice)
+    //add image array to formdata
+    for(let i = 0; i < files.length; i++){
+      formData.append('images', files[i]) //this will allow us to store x number of images to the images property that will be stored in database
+    }
+
+    //generate token
+    try{
+      const token = await getToken()
+
+          //api call
+    const {data} = await axios.post('api/product/add', formData, {headers: {Authorization: `Bearer ${token}`}})
+
+    if(data.success){ //success notification
+      toast.success(data.message)
+      //after receiving message reset the states
+      setFiles([]);
+      setName('');
+      setDescription('');
+      setCategory('Earphone');
+      setPrice('');
+      setOfferPrice('');
+    }else{
+      toast.error(data.message);
+    }
+    }catch(error){
+      toast.error(error.message);
+    }
   };
 
   return (
