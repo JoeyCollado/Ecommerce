@@ -18,10 +18,10 @@ export async function POST(request){
       //update the user cart item with the cart data
       user.cartItems = cartData
       //save the user
-      user.save()
+      await user.save()
       //send response
-      NextResponse.json({success: true})
+      return NextResponse.json({success: true})
     }catch(error){
-      NextResponse.json({success: false, message: error.message})
+      return NextResponse.json({success: false, message: error.message})
     }
 }

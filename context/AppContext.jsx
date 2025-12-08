@@ -60,7 +60,6 @@ export const AppContextProvider = (props) => {
       }else{
         toast.error(data.message) //error notification
       }
-
     } catch (error) {
       toast.error(error.message) //error notification
     }
@@ -75,8 +74,19 @@ export const AppContextProvider = (props) => {
       cartData[itemId] = 1;
     }
     setCartItems(cartData);
-    //toast notif
-    toast.success('Item added to cart')
+   
+    if(user){ //if user is login call the api to update our cart on the database
+      try{
+        //get token
+        const token = await getToken()
+        //call api
+        await axios.post('/api/cart/update', {cartData}, {headers:{Authorization: `Bearer ${token}`}})
+        //toast notif
+        toast.success('Item added to cart')
+      }catch(error){
+        toast.error(error.message)
+      }
+    }
   };
 
   const updateCartQuantity = async (itemId, quantity) => {
@@ -87,6 +97,20 @@ export const AppContextProvider = (props) => {
       cartData[itemId] = quantity;
     }
     setCartItems(cartData);
+
+    if(user){ //if user is login call the api to update our cart on the database
+      try{
+        //get token
+        const token = await getToken()
+        //call api
+        await axios.post('/api/cart/update', {cartData}, {headers:{Authorization: `Bearer ${token}`}})
+        //toast notif
+        toast.success('Cart Updated')
+      }catch(error){
+        toast.error(error.message)
+      }
+    }
+
   };
 
   const getCartCount = () => {
