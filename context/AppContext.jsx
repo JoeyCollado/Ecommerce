@@ -75,6 +75,8 @@ export const AppContextProvider = (props) => {
       cartData[itemId] = 1;
     }
     setCartItems(cartData);
+    //toast notif
+    toast.success('Item added to cart')
   };
 
   const updateCartQuantity = async (itemId, quantity) => {
