@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const AddAddress = () => {
 
@@ -26,7 +27,7 @@ const AddAddress = () => {
         try{
             const token = await getToken()
             //call api
-            const {data} = await axiost.post('/api/user/add-address', {address}, {headers: {Authorizaion: `Bearer ${token}`}})
+            const {data} = await axios.post('/api/user/add-address', {address}, {headers: {Authorizaion: `Bearer ${token}`}})
             //check response
             if(data.success){
                 toast.success(data.message)
