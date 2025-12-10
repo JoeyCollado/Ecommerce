@@ -1,17 +1,36 @@
 import { addressDummyData } from "@/assets/assets";
 import { useAppContext } from "@/context/AppContext";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const OrderSummary = () => {
 
-  const { currency, router, getCartCount, getCartAmount } = useAppContext()
+  const { currency, router, getCartCount, getCartAmount, getToken, user, cart, setCartItems } = useAppContext()
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [userAddresses, setUserAddresses] = useState([]);
 
   const fetchUserAddresses = async () => {
-    setUserAddresses(addressDummyData);
+    // setUserAddresses(addressDummyData);
+    //load and fetch user address from backend to frontend
+    try{
+      const token = await getToken();
+      const {data} = await axios.get('/api/user/get-address', {headers: {Authorization: `Bearer ${token}`}})
+
+      if(data.success){
+        setUserAddresses(data.addresses)
+        if(data.addresses.length > 0){
+          setSelectedAddress(data.addresses[0])
+        }
+      }else{
+        toast.error(data.message)
+      }
+    }catch(error){
+      toast.error(error.message)
+    }
+
   }
 
   const handleAddressSelect = (address) => {
@@ -24,8 +43,10 @@ const OrderSummary = () => {
   }
 
   useEffect(() => {
-    fetchUserAddresses();
-  }, [])
+    if(user){ // if user is login function will be executed
+      fetchUserAddresses();
+    }
+  }, [user])
 
   return (
     <div className="w-full md:w-96 bg-gray-500/5 p-5">
