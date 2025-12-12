@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 const OrderSummary = () => {
 
-  const { currency, router, getCartCount, getCartAmount, getToken, user, cart, setCartItems } = useAppContext()
+  const { currency, router, getCartCount, getCartAmount, getToken, user, cartItems, setCartItems } = useAppContext()
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -38,8 +38,40 @@ const OrderSummary = () => {
     setIsDropdownOpen(false);
   };
 
-  const createOrder = async () => {
+  const createOrder = async () => { //function to call place order api
+      try{
+        if(!selectedAddress){ //if no address is selected
+           return toast.error('Please select an address')
+        } 
 
+        //create cart items array using cart items
+        //convert object into array
+        let cartItemsArray = Object.keys(cartItems).map((key) => ({product: key, quantity: cartItems[key]})) 
+        //filter out objects where quantity is zero
+        cartItemsArray = cartItemsArray.filter(item => item.quantity > 0)
+        //check if cart is empty or not
+        if(cartItemsArray.length === 0){
+          return toast.error("Cart is empty")
+        }
+        //create order supposed we have an address and the data in the cart
+        const token = await getToken()
+        //api call                       api endpoint
+        const {data} = await axios.post('/api/order/create' , { //request body
+          address: selectedAddress._id, //get address id
+          items: cartItemsArray
+        }, {headers: {Authorization: `Bearer ${token}`}})
+        //check response
+        if(data.success){
+          toast.success(data.message)
+          setCartItems({}) //clear user carts
+          //after placing an order redirect to the landing page order placed route
+          router.push('/order-placed')
+        }else{
+          toast.error(data.message)
+        }
+      }catch(error){
+        toast.error(error.message)
+      }
   }
 
   useEffect(() => {
