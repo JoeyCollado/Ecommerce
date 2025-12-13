@@ -56,6 +56,8 @@ export const syncUserDeletion = inngest.createFunction(
 );
 
 // inggest function to create user order in database
+// Note: Orders are now saved directly in the API route, but this function
+// can still be used for batching or if direct save fails
 export const createUserOrder = inngest.createFunction(
   {
     id: 'create-user-order',
@@ -66,20 +68,48 @@ export const createUserOrder = inngest.createFunction(
   },
   {event: 'order/created'},
   async ({events}) => {
-     
-    const orders = events.map((event) => {
-      return {
-        userId: event.data.userId, 
-        items: event.data.items,
-        amount: event.data.amount,
-        address: event.data.address,
-        date: event.data.date
+    try {
+      console.log('Inngest: Processing orders', events.length);
+      
+      //connect to database
+      await connectDB()
+      console.log('Inngest: Connected to database');
+      
+      const ordersToInsert = [];
+      
+      for (const event of events) {
+        // Check if order already exists (to prevent duplicates)
+        const existingOrder = await Order.findOne({
+          userId: event.data.userId,
+          date: event.data.date,
+          amount: event.data.amount
+        });
+        
+        if (!existingOrder) {
+          ordersToInsert.push({
+            userId: event.data.userId, 
+            items: event.data.items,
+            amount: event.data.amount,
+            address: event.data.address,
+            date: event.data.date
+          });
+        } else {
+          console.log('Inngest: Order already exists, skipping', existingOrder._id);
+        }
       }
-    })
-    //connect to database
-    await connectDB()
-    await Order.insertMany(orders)
+      
+      if (ordersToInsert.length > 0) {
+        // Insert only new orders
+        const result = await Order.insertMany(ordersToInsert)
+        console.log('Inngest: Orders inserted', result.length);
+      } else {
+        console.log('Inngest: All orders already exist, nothing to insert');
+      }
 
-    return {success: true, processed: orders.length};
+      return {success: true, processed: ordersToInsert.length, skipped: events.length - ordersToInsert.length};
+    } catch (error) {
+      console.error('Inngest: Error creating orders', error);
+      throw error;
+    }
   }
 )
