@@ -60,7 +60,7 @@ const Navbar = () => {
             </UserButton.MenuItems>
 
             <UserButton.MenuItems>
-              <UserButton.Action label="My oder" labelIcon={<BagIcon/>} onClick={() => router.push('/my-orders')}/>
+              <UserButton.Action label="My Order" labelIcon={<BagIcon/>} onClick={() => router.push('/my-orders')}/>
             </UserButton.MenuItems>
           </UserButton>
           </>

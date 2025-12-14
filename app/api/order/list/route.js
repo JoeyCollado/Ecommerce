@@ -2,14 +2,14 @@ import connectDB from "@/config/db";
 import Address from "@/models/Address";
 import Order from "@/models/Order";
 import Product from "@/models/Product";
-import { getAuth } from "@clerk/nextjs/dist/types/server";
+import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 //api to fetch orders from database to frontend
 
 export async function GET(request){
 
     try{
-       const {userId} = getAuth();
+       const {userId} = getAuth(request);
 
        await connectDB();
 
