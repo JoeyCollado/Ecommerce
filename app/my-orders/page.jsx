@@ -9,7 +9,7 @@ import Loading from "@/components/Loading";
 
 const MyOrders = () => {
 
-    const { currency } = useAppContext();
+    const { currency, } = useAppContext();
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
