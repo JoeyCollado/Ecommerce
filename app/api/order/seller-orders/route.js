@@ -2,7 +2,7 @@ import connectDB from "@/config/db";
 import authSeller from "@/lib/authSeller";
 import Address from "@/models/Address";
 import Order from "@/models/Order";
-import { getAuth } from "@clerk/nextjs/dist/types/server";
+import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { useId } from "react";
 
@@ -21,7 +21,7 @@ export async function GET(request){
        //initialize model
        Address.length
        //get all orders available in db
-       const orders = Order.find({}).populate('address items.product')
+       const orders = await Order.find({}).populate('address items.product')
        //get all orders in the orders array then generate response
        return NextResponse.json({success: true, orders})
     }catch(error){
